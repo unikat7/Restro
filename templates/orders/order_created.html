@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Order Placed — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5 text-center">
+    <i class="fa-solid fa-circle-check fa-4x mb-4" style="color:#c8942d;"></i>
+    <h2 class="brand-font">Thank You, {{ order.first_name }}!</h2>
+    <p class="lead">Your order <strong>#{{ order.id }}</strong> has been placed successfully.</p>
+    {% if order.payment_status == 'paid' %}
+    <p class="text-success"><i class="fa-solid fa-check"></i> Payment received through eSewa.</p>
+    {% else %}
+    <p class="text-warning">Payment is still pending.</p>
+    {% endif %}
+    <p class="text-muted">We'll contact you at {{ order.phone }} once it's on the way.</p>
+    <a href="{% url 'menu:menu_list' %}" class="btn btn-brand mt-3">Back to Menu</a>
+</section>
+{% endblock %}

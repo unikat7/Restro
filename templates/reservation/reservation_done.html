@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Reservation Confirmed — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5 text-center">
+    <i class="fa-solid fa-champagne-glasses fa-4x mb-4" style="color:#c8942d;"></i>
+    <h2 class="brand-font">Reservation Received!</h2>
+    <p class="lead">We'll confirm your table shortly via email or phone.</p>
+    <a href="{% url 'core:home' %}" class="btn btn-brand mt-3">Back to Home</a>
+</section>
+{% endblock %}

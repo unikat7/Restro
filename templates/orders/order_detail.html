@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }} — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5">
+    <div class="section-title">
+        <span>Order</span>
+        <h2>Order #{{ order.id }}</h2>
+    </div>
+    <p><strong>Status:</strong> <span class="badge bg-secondary status-badge">{{ order.status }}</span></p>
+    <p><strong>Type:</strong> {{ order.get_order_type_display }}</p>
+    {% if order.address %}<p><strong>Address:</strong> {{ order.address }}, {{ order.city }}</p>{% endif %}
+    <table class="table mt-4">
+        <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+        <tbody>
+        {% for item in order.items.all %}
+            <tr><td>{{ item.menu_item.name }}</td><td>Rs.{{ item.price }}</td><td>{{ item.quantity }}</td><td>Rs.{{ item.get_cost }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h5 class="text-end">Total: <span class="price-tag">Rs.{{ order.get_total_cost }}</span></h5>
+</section>
+{% endblock %}

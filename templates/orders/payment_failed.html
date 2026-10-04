@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Payment Not Completed — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5 text-center">
+    <i class="fa-solid fa-circle-exclamation fa-4x mb-4 text-warning"></i>
+    <h2 class="brand-font">Payment was not completed</h2>
+    <p class="lead">Your order was saved, but eSewa did not confirm the payment.</p>
+    <p class="text-muted">You can return to the menu and try again.</p>
+    <a href="{% url 'menu:menu_list' %}" class="btn btn-brand mt-3">Back to Menu</a>
+</section>
+{% endblock %}

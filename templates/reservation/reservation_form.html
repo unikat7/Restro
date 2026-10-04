@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Reserve a Table — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5">
+    <div class="section-title">
+        <span>Book Now</span>
+        <h2>Reserve a Table</h2>
+    </div>
+    <div class="auth-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                {{ form.name }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                {{ form.phone }}
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label class="form-label">Date</label>
+                    {{ form.date }}
+                </div>
+                <div class="col-6 mb-3">
+                    <label class="form-label">Time</label>
+                    {{ form.time }}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Number of Guests</label>
+                {{ form.guests }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Special Requests (optional)</label>
+                {{ form.message }}
+            </div>
+            <button type="submit" class="btn btn-brand w-100">Reserve Table</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

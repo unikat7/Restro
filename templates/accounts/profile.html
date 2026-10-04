@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}My Profile — TastyHub{% endblock %}
+{% block content %}
+<section class="container">
+    <div class="auth-card">
+        <h3 class="brand-font text-center mb-4">My Profile</h3>
+        <p class="text-center text-muted">{{ user.username }} &bull; {{ user.email }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-brand w-100">Save Changes</button>
+        </form>
+        <p class="text-center mt-3"><a href="{% url 'accounts:password_change' %}">Change Password</a></p>
+    </div>
+</section>
+{% endblock %}

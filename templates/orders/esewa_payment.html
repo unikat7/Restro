@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Pay with eSewa — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5 text-center">
+    <div class="section-title">
+        <span>Order #{{ order.id }}</span>
+        <h2>Pay with eSewa</h2>
+    </div>
+    <p class="lead">Total: <strong class="price-tag">Rs.{{ order.get_total_cost }}</strong></p>
+    <p class="text-muted">Click the button below to continue to the eSewa payment page.</p>
+    <form method="post" action="{{ payment_url }}">
+        {% for name, value in payment_data.items %}
+        <input type="hidden" name="{{ name }}" value="{{ value }}">
+        {% endfor %}
+        <button type="submit" class="btn btn-brand mt-3">
+            <i class="fa-solid fa-credit-card"></i> Continue to eSewa
+        </button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ item.name }} — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5">
+    <div class="row g-5">
+        <div class="col-md-6">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" class="img-fluid rounded-4" alt="{{ item.name }}">
+            {% else %}
+            <div class="placeholder-img" style="height:380px; border-radius:16px;"><i class="fa-solid fa-utensils fa-2x"></i></div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'menu:category_detail' item.category.slug %}" class="text-uppercase small" style="color:#c8942d; letter-spacing:1px;">{{ item.category.name }}</a>
+            <h1 class="brand-font mt-2">{{ item.name }}</h1>
+            {% if item.is_vegetarian %}<span class="badge bg-success mb-2">Vegetarian</span>{% endif %}
+            <p class="lead text-muted">{{ item.description }}</p>
+            <p class="price-tag fs-3">Rs.{{ item.price }}</p>
+            <form method="post" action="{% url 'cart:cart_add' item.id %}" class="d-flex align-items-center gap-2">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:90px;">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="btn btn-brand" type="submit"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+            </form>
+        </div>
+    </div>
+
+    {% if related_items %}
+    <div class="section-title mt-5">
+        <span>You Might Also Like</span>
+        <h2>Related Dishes</h2>
+    </div>
+    <div class="row g-4">
+        {% for rel in related_items %}
+        <div class="col-sm-6 col-lg-3">
+            <div class="card card-menu">
+                <a href="{{ rel.get_absolute_url }}">
+                    {% if rel.image %}
+                    <img src="{{ rel.image.url }}" alt="{{ rel.name }}">
+                    {% else %}
+                    <div class="placeholder-img"><i class="fa-solid fa-utensils"></i></div>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h6><a href="{{ rel.get_absolute_url }}" class="text-decoration-none text-dark">{{ rel.name }}</a></h6>
+                    <span class="price-tag">Rs.{{ rel.price }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

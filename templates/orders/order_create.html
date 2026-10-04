@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Checkout — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5">
+    <div class="section-title">
+        <span>Checkout</span>
+        <h2>Confirm Your Order</h2>
+    </div>
+    <div class="row g-5">
+        <div class="col-md-7">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        {{ form.phone }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label d-block">Order Type</label>
+                        {% for radio in form.order_type %}
+                        <div class="form-check form-check-inline">
+                            {{ radio.tag }}
+                            <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                        </div>
+                        {% endfor %}
+                        {% if form.order_type.errors %}<div class="text-danger small">{{ form.order_type.errors }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Address</label>
+                        {{ form.address }}
+                        {% if form.address.errors %}<div class="text-danger small">{{ form.address.errors }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">City</label>
+                        {{ form.city }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Notes (optional)</label>
+                        {{ form.notes }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-brand mt-4 w-100">Place Order</button>
+            </form>
+        </div>
+        <div class="col-md-5">
+            <div class="card p-4" style="border:none; border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,0.08);">
+                <h5 class="mb-3">Order Summary</h5>
+                {% for cart_item in cart %}
+                <div class="d-flex justify-content-between mb-2">
+                    <span>{{ cart_item.item.name }} × {{ cart_item.quantity }}</span>
+                    <span>Rs.{{ cart_item.total_price }}</span>
+                </div>
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Total</strong>
+                    <strong class="price-tag">Rs.{{ cart.get_total_price }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

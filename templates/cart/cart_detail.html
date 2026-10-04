@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Your Cart — TastyHub{% endblock %}
+{% block content %}
+<section class="container py-5">
+    <div class="section-title">
+        <span>Review</span>
+        <h2>Your Cart</h2>
+    </div>
+
+    {% if cart|length > 0 %}
+    <div class="table-responsive">
+        <table class="table align-middle cart-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th style="width:140px;">Quantity</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in cart %}
+                <tr>
+                    <td>
+                        <strong>{{ cart_item.item.name }}</strong><br>
+                        <span class="text-muted small">{{ cart_item.item.category.name }}</span>
+                    </td>
+                    <td>Rs.{{ cart_item.price }}</td>
+                    <td>
+                        <form method="post" action="{% url 'cart:cart_update' cart_item.item.id %}" class="d-flex">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control form-control-sm me-2" style="width:70px;">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>Rs.{{ cart_item.total_price }}</td>
+                    <td>
+                        <a href="{% url 'cart:cart_remove' cart_item.item.id %}" class="text-danger"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <a href="{% url 'menu:menu_list' %}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left"></i> Continue Shopping</a>
+        <div class="text-end">
+            <h4>Total: <span class="price-tag">Rs.{{ cart.get_total_price }}</span></h4>
+            <a href="{% url 'orders:order_create' %}" class="btn btn-brand mt-2">Proceed to Checkout</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fa-solid fa-cart-shopping fa-3x mb-3" style="color:#c8942d;"></i>
+        <p class="lead">Your cart is empty.</p>
+        <a href="{% url 'menu:menu_list' %}" class="btn btn-brand">Browse Menu</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

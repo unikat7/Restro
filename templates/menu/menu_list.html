@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Our Menu — TastyHub{% endblock %}
+{% block content %}
+<section class="hero" style="padding:80px 0;">
+    <div class="container">
+        <h1 style="font-size:2.4rem;">Our Menu</h1>
+        <p>Freshly prepared dishes, made to order.</p>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="text-center mb-4">
+        <a href="{% url 'menu:menu_list' %}" class="category-pill {% if not current_category %}active{% endif %}">All</a>
+        {% for cat in categories %}
+        <a href="{% url 'menu:category_detail' cat.slug %}" class="category-pill {% if current_category.slug == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+
+    <form method="get" class="d-flex justify-content-center mb-5" style="max-width:420px; margin:0 auto;">
+        <input type="text" name="q" class="form-control me-2" placeholder="Search dishes..." value="{{ query|default:'' }}">
+        <button class="btn btn-brand" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card card-menu">
+                <a href="{{ item.get_absolute_url }}" class="text-decoration-none text-dark">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    {% else %}
+                    <div class="placeholder-img"><i class="fa-solid fa-utensils"></i></div>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-1"><a href="{{ item.get_absolute_url }}" class="text-decoration-none text-dark">{{ item.name }}</a></h5>
+                        {% if item.is_vegetarian %}<span class="badge bg-success">Veg</span>{% endif %}
+                    </div>
+                    <p class="card-text text-muted small">{{ item.description|truncatewords:10 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-tag">Rs.{{ item.price }}</span>
+                        <form method="post" action="{% url 'cart:cart_add' item.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button class="btn btn-brand btn-sm" type="submit">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted text-center">No items found. Try a different search or add items in the admin panel.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}TastyHub — Fine Dining & Fast Delivery{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <p class="text-uppercase" style="letter-spacing:3px; color:#e8b95a;">Welcome to TastyHub</p>
+        <h1>Delicious Food, <br>Delivered With Love</h1>
+        <p class="lead mb-4">Fresh ingredients, bold flavors, and a menu crafted daily by our chefs.</p>
+        <a href="{% url 'menu:menu_list' %}" class="btn btn-brand me-2">View Menu</a>
+        <a href="{% url 'reservation:reservation_create' %}" class="btn btn-outline-brand">Book a Table</a>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="section-title">
+        <span>Browse</span>
+        <h2>Our Categories</h2>
+    </div>
+    <div class="row g-3 justify-content-center text-center">
+        {% for cat in categories %}
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="{% url 'menu:category_detail' cat.slug %}" class="text-decoration-none">
+                <div class="card-menu p-4">
+                    <i class="fa-solid fa-bowl-food fa-2x mb-2" style="color:#c8942d;"></i>
+                    <h6 class="mb-0" style="color:#2c2621;">{{ cat.name }}</h6>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p class="text-muted">No categories yet — add some from the admin panel.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="section-title">
+        <span>Chef's Picks</span>
+        <h2>Today's Specials</h2>
+    </div>
+    <div class="row g-4">
+        {% for item in specials %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-menu">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                <div class="placeholder-img"><i class="fa-solid fa-utensils"></i></div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text text-muted small">{{ item.description|truncatewords:12 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-tag">Rs.{{ item.price }}</span>
+                        <form method="post" action="{% url 'cart:cart_add' item.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="next" value="{% url 'core:home' %}">
+                            <button class="btn btn-brand btn-sm" type="submit">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted text-center">No specials yet — mark items as "Chef's Special" in the admin panel.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="py-5" style="background-color:#1e1b18; color:#f1e9dd;">
+    <div class="container text-center">
+        <h2 class="brand-font mb-3" style="color:#e8b95a;">Hungry Already?</h2>
+        <p class="mb-4">Order online now or reserve a table for a memorable dining experience.</p>
+        <a href="{% url 'menu:menu_list' %}" class="btn btn-brand">Order Now</a>
+    </div>
+</section>
+{% endblock %}
